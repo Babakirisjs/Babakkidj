@@ -1,0 +1,155 @@
+
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ماشین حساب شیشه‌ای</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Vazir', sans-serif;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      background: linear-gradient(135deg, #74ebd5, #9face6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      direction: rtl;
+    }
+    .calculator {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      padding: 20px;
+      width: 320px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+    .display {
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 12px;
+      padding: 15px;
+      font-size: 24px;
+      text-align: left;
+      margin-bottom: 20px;
+      color: #fff;
+      height: 50px;
+      overflow-x: auto;
+    }
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    button {
+      font-size: 18px;
+      padding: 15px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: 0.3s ease;
+      color: #fff;
+    }
+    button:hover {
+      transform: scale(1.05);
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+    .btn-number {
+      background: rgba(255, 255, 255, 0.25);
+    }
+    .btn-operator {
+      background: rgba(255, 165, 0, 0.5);
+    }
+    .btn-clear {
+      background: rgba(231, 76, 60, 0.5);
+    }
+    .btn-equal {
+      background: rgba(46, 204, 113, 0.6);
+      grid-column: span 2;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="calculator">
+    <div class="display" id="display">0</div>
+    <div class="buttons">
+      <button class="btn-clear" onclick="clearDisplay()">C</button>
+      <button class="btn-operator" onclick="appendOperator('/')">÷</button>
+      <button class="btn-operator" onclick="appendOperator('*')">×</button>
+      <button class="btn-operator" onclick="appendOperator('-')">−</button>
+
+      <button class="btn-number" onclick="appendNumber('7')">7</button>
+      <button class="btn-number" onclick="appendNumber('8')">8</button>
+      <button class="btn-number" onclick="appendNumber('9')">9</button>
+      <button class="btn-operator" onclick="appendOperator('+')">+</button>
+
+      <button class="btn-number" onclick="appendNumber('4')">4</button>
+      <button class="btn-number" onclick="appendNumber('5')">5</button>
+      <button class="btn-number" onclick="appendNumber('6')">6</button>
+      <button class="btn-number" onclick="appendNumber('1')">1</button>
+
+      <button class="btn-number" onclick="appendNumber('2')">2</button>
+      <button class="btn-number" onclick="appendNumber('3')">3</button>
+      <button class="btn-number" onclick="appendNumber('0')">0</button>
+      <button class="btn-number" onclick="appendNumber('.')">.</button>
+
+      <button class="btn-equal" onclick="calculateResult()">=</button>
+    </div>
+  </div>
+
+  <script>
+    const display = document.getElementById('display');
+    let currentInput = '';
+
+    function appendNumber(number) {
+      if (currentInput === '0' && number !== '.') {
+        currentInput = number;
+      } else {
+        currentInput += number;
+      }
+      updateDisplay();
+    }
+
+    function appendOperator(operator) {
+      if (currentInput === '') return;
+      const lastChar = currentInput[currentInput.length - 1];
+      if ('+-*/'.includes(lastChar)) {
+        currentInput = currentInput.slice(0, -1) + operator;
+      } else {
+        currentInput += operator;
+      }
+      updateDisplay();
+    }
+
+    function clearDisplay() {
+      currentInput = '';
+      updateDisplay();
+    }
+
+    function calculateResult() {
+      try {
+        currentInput = eval(currentInput).toString();
+        updateDisplay();
+      } catch (error) {
+        currentInput = 'خطا';
+        updateDisplay();
+        setTimeout(() => {
+          currentInput = '';
+          updateDisplay();
+        }, 1500);
+      }
+    }
+
+    function updateDisplay() {
+      display.textContent = currentInput || '0';
+    }
+  </script>
+
+</body>
+</html>
